@@ -1,6 +1,6 @@
 # Mesh Viewer
 
-This is the framework for a program to visualize meshes. You can run the program on [GitHub pages](https://csci-4611-spring-2022.github.io/Lecture-10).
+This is the framework for a program to visualize meshes. You can run the program on [GitHub pages](https://csci-4611-spring-2022.github.io/Mesh-Viewer).
 
 ## Prerequisites
 

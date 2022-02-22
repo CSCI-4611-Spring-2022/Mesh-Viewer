@@ -1,7 +1,6 @@
 import * as THREE from 'three'
 import { GUI } from 'dat.gui'
 import { GraphicsApp } from './GraphicsApp'
-import { MeshLambertMaterial } from 'three';
 
 export class MeshViewer extends GraphicsApp
 { 
@@ -127,7 +126,7 @@ export class MeshViewer extends GraphicsApp
         this.scene.add(this.meshGroup);
 
         // Create a unit cube as an example
-        var cube = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), new MeshLambertMaterial({color: 'skyblue'}));
+        var cube = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), new THREE.MeshLambertMaterial({color: 'skyblue'}));
         this.meshGroup.add(cube);
     }
 
