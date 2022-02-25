@@ -16,13 +16,13 @@ export abstract class GraphicsApp
     // Clock for computing fps
     private clock : THREE.Clock;
 
-    constructor(aspectRatio = 1.333)
+    constructor(fov = 60, aspectRatio = 1.333, znear = 1, zfar = 1000)
     {
         // Set the default camera parameters
+        this.fov = fov;
         this.aspectRatio = aspectRatio;
-        this.fov = 60;
-        this.znear = 1;
-        this.zfar = 1000;
+        this.znear = znear;
+        this.zfar = zfar;
 
         // Initialize graphics
         this.renderer = new THREE.WebGLRenderer();
@@ -35,6 +35,7 @@ export abstract class GraphicsApp
         window.addEventListener('mousedown', (event: MouseEvent) => {this.onMouseDown(event)});
         window.addEventListener('mouseup', (event: MouseEvent) => {this.onMouseUp(event)});
         window.addEventListener('mousemove', (event: MouseEvent) => {this.onMouseMove(event)});
+        window.addEventListener('wheel', (event: WheelEvent) => {this.onMouseWheel(event)});
         window.addEventListener('keydown', (event: KeyboardEvent) => {this.onKeyDown(event)});
         window.addEventListener('keyup', (event: KeyboardEvent) => {this.onKeyUp(event)});
 
@@ -116,6 +117,7 @@ export abstract class GraphicsApp
     onMouseDown(event: MouseEvent) : void {}
     onMouseUp(event: MouseEvent) : void {}
     onMouseMove(event: MouseEvent) : void {}
+    onMouseWheel(event: WheelEvent) : void {}
     onKeyDown(event: KeyboardEvent) : void {}
     onKeyUp(event: KeyboardEvent) : void {}
 }

@@ -7,7 +7,6 @@ export class MeshViewer extends GraphicsApp
     // State variables
     private debugMode : boolean;
     private mouseDrag : boolean;
-    private crushAlpha : number;
 
     // Camera parameters
     private cameraOrbitX : number;
@@ -24,16 +23,12 @@ export class MeshViewer extends GraphicsApp
     private light : THREE.DirectionalLight;
     private lightHelper : THREE.Line;
 
-    private meshGroup : THREE.Group;
-
     constructor()
     {
-        // Pass in the aspect ratio to the constructor
-        super(1920/1080);
+        super(60, 1920/1080, 0.1, 100);
 
         this.debugMode = false;
         this.mouseDrag = false;
-        this.crushAlpha = 0;
 
         this.cameraOrbitX = 0;
         this.cameraOrbitY = 0;
@@ -46,7 +41,6 @@ export class MeshViewer extends GraphicsApp
         this.debugMaterial = new THREE.MeshBasicMaterial();
         this.light = new THREE.DirectionalLight();
         this.lightHelper = new THREE.Line();
-        this.meshGroup = new THREE.Group();
     }
 
     createScene() : void
@@ -83,15 +77,6 @@ export class MeshViewer extends GraphicsApp
         // Update all the light visuals
         this.updateLightParameters();
 
-        // Create the skybox material
-        var skyboxMaterial = new THREE.MeshBasicMaterial();
-        skyboxMaterial.side = THREE.BackSide;
-        skyboxMaterial.color.set('black');
-
-        // Create a skybox
-        var skybox = new THREE.Mesh(new THREE.BoxGeometry(1000, 1000, 1000), skyboxMaterial);
-        this.scene.add(skybox);
-
         // Put the debug material into wireframe mode
         this.debugMaterial.wireframe = true;
 
@@ -122,12 +107,9 @@ export class MeshViewer extends GraphicsApp
         debugController.name('Debug Mode');
         debugController.onChange((value: boolean) => { this.toggleDebugMode(value) });
 
-        // Add a group to the scene 
-        this.scene.add(this.meshGroup);
-
         // Create a unit cube as an example
         var cube = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), new THREE.MeshLambertMaterial({color: 'skyblue'}));
-        this.meshGroup.add(cube);
+        this.scene.add(cube);
     }
 
     update(deltaTime : number) : void
@@ -175,6 +157,12 @@ export class MeshViewer extends GraphicsApp
         }
     }
 
+    onMouseWheel(event: WheelEvent) : void
+    {
+        this.cameraDistance += event.deltaY / 1000;
+        this.updateCameraOrbit();
+    }
+
     private updateCameraOrbit() : void
     {
         var rotationMatrix = new THREE.Matrix4().makeRotationY(-this.cameraOrbitY * Math.PI / 180);
@@ -210,7 +198,7 @@ export class MeshViewer extends GraphicsApp
 
     private toggleDebugMode(debugMode: boolean) : void
     {
-        this.meshGroup.children.forEach((elem: THREE.Object3D) => {
+        this.scene.traverse((elem: THREE.Object3D) => {
             if(elem instanceof THREE.Mesh)
             {
                 if(debugMode)
